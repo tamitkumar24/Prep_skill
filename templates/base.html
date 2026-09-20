@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}PrepRoom{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body class="{{ 'app' if session.uid else '' }}">
+{% if session.uid %}<aside class="side"><a class="logo" href="{{ url_for('dashboard') }}"><i></i>PrepRoom</a>
+<nav><a href="{{ url_for('dashboard') }}">Practice</a><a href="{{ url_for('progress') }}">Progress</a><a href="{{ url_for('doubts') }}">AI Doubt Solver</a></nav>
+<div class="who">{{ session.name }}<a href="{{ url_for('logout') }}">Log out</a></div></aside>{% endif %}
+<div class="main">{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}{% block body %}{% endblock %}</div>
+{% if session.uid %}<aside id="ai" class="ai"><header><b>AI Tutor</b><button onclick="closeAI()" aria-label="Close">×</button></header><div id="msgs"></div>
+<div class="chips"><button onclick="ask('Give me a hint')">Hint</button><button onclick="ask('Explain the concept behind this')">Explain the concept</button></div>
+<form onsubmit="return send(event)"><input id="qi" placeholder="Ask your doubt…" autocomplete="off"><button>Send</button></form></aside>
+<script>let QID=0;const M=document.getElementById('msgs');
+function openAI(id){QID=id||0;document.getElementById('ai').classList.add('open');document.getElementById('qi').focus()}
+function closeAI(){document.getElementById('ai').classList.remove('open')}
+function add(c,t){const d=document.createElement('div');d.className='m '+c;d.textContent=t;M.appendChild(d);M.scrollTop=1e9;return d}
+async function ask(t){openAI(QID);add('me',t);const b=add('bot','Thinking…');
+try{const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({qid:QID,message:t})});b.textContent=(await r.json()).reply}catch(e){b.textContent='Network error. Try again.'}}
+function send(e){e.preventDefault();const i=document.getElementById('qi');if(i.value.trim()){ask(i.value.trim());i.value=''}return false}</script>{% endif %}
+</body></html>

@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block body %}<div class="wrap">
+<div class="hero"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52"/><circle class="v" cx="60" cy="60" r="52" style="stroke-dasharray:{{ iv.score*3.267 }} 327"/></svg><b>{{ iv.correct }}/{{ iv.total }}</b><small>{{ iv.score|int }}%</small></div>
+<div><h1>{{ 'Interview-ready.' if iv.score>=70 else 'Getting close.' if iv.score>=40 else 'Good start. Go again.' }}</h1><p class="muted">{{ iv.category }} · {{ iv.level|capitalize }} · {{ iv.created }}</p>
+<a class="btn" href="{{ url_for('dashboard') }}">Practise again</a> <a class="btn ghost" href="javascript:print()">Save as PDF</a></div></div>
+{% for a in ans %}{% set pk=a.picked|j %}{% set an=a.answer|j %}<article class="card rv"><div class="row between"><h3>{{ a.text }}</h3><span class="badge {{ 'good' if a.ok else 'bad' }}">{{ 'Correct' if a.ok else 'Incorrect' }}</span></div>
+{% if a.code %}<pre class="code">{{ a.code }}</pre>{% endif %}
+{% for o in a.options|j %}<div class="ro {{ 'c' if loop.index0 in an }} {{ 'w' if loop.index0 in pk and loop.index0 not in an }}"><i>{{ 'ABCD'[loop.index0] }}</i>{{ o }}{% if loop.index0 in pk %}<em>your pick</em>{% endif %}</div>{% endfor %}
+<p class="exp">{{ a.explanation }}</p><button class="btn ghost sm" onclick="openAI({{ a.question_id }});ask('Explain this question step by step')">Ask AI to explain</button></article>{% endfor %}</div>{% endblock %}

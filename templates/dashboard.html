@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block body %}<div class="wrap">
+<div class="top"><div><h1>Hi {{ session.name.split()[0] }} 👋</h1><p class="quote">{{ quote }}</p></div>
+<div class="stats"><div><b>{{ total }}</b>rounds done</div><div><b>{{ avg ~ '%' if avg is not none else '–' }}</b>average</div></div></div>
+<form method="post" action="{{ url_for('start') }}"><h2>Choose a subject</h2>
+<div class="grid">{% for c,d in subjects.items() %}<label class="tile"><input type="radio" name="category" value="{{ c }}" {{ 'checked' if loop.first }}><span><b>{{ c }}</b><small>{{ d }}</small></span></label>{% endfor %}</div>
+<div class="bar2 card"><label>Difficulty<select name="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></label>
+<label>Questions<select name="count"><option value="4">4</option><option value="8">8</option><option value="16">16</option></select></label>
+<button class="btn">Start round</button></div><p class="muted">Each subject has 4 questions right now, so pick Mixed for longer rounds.</p></form>
+{% if rows %}<h2>Recent rounds</h2><div class="list">{% for r in rows %}<a class="item" href="{{ url_for('result', iid=r.id) }}"><span>{{ r.category }} · {{ r.level|capitalize }}<small>{{ r.created }}</small></span><b>{{ r.correct }}/{{ r.total }}</b></a>{% endfor %}</div>{% endif %}</div>{% endblock %}

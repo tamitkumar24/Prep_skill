@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block body %}<div class="wrap"><h1>Your progress</h1>
+{% if rows %}<div class="card"><div class="chart">{% for r in rows[-12:] %}<a href="{{ url_for('result', iid=r.id) }}" title="{{ r.category }} · {{ r.created }}"><i style="height:{{ r.score }}%"></i><small>{{ r.score|int }}%</small></a>{% endfor %}</div></div>
+<h2>All rounds</h2><div class="list">{% for r in rows|reverse %}<a class="item" href="{{ url_for('result', iid=r.id) }}"><span>{{ r.category }} · {{ r.level|capitalize }}<small>{{ r.created }}</small></span><b>{{ r.correct }}/{{ r.total }}</b></a>{% endfor %}</div>
+{% else %}<p class="muted">Nothing to chart yet. <a href="{{ url_for('dashboard') }}">Start your first round</a>.</p>{% endif %}</div>{% endblock %}

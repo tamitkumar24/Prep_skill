@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block body %}<div class="wrap narrow"><h1>Stuck on something? Ask.</h1>
+<p class="muted">Your AI tutor explains concepts, debugs your thinking and gives hints without spoiling answers.</p>
+<div class="grid one">{% for p in ['Explain binary search with a tiny example','Difference between process and thread','Why does a mutable default argument cause bugs in Python?','How do I explain overfitting in an interview?'] %}<button class="tile btnlike" onclick="ask({{ p|tojson }})"><span><b>{{ p }}</b></span></button>{% endfor %}</div></div>
+<script>window.addEventListener('load',()=>openAI(0))</script>{% endblock %}

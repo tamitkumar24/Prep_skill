@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block body %}<div class="wrap narrow">
+<div class="meta"><span>{{ iv.category }} · {{ iv.level|capitalize }}</span><span>Question {{ n }} of {{ total }}</span></div><div class="prog"><i style="width:{{ (n-1)/total*100 }}%"></i></div>
+<form method="post" class="card"><span class="tag">{{ 'Select all that apply' if q.type=='msq' else 'Choose one answer' }}</span>
+<h1 class="qt">{{ q.text }}</h1>{% if q.code %}<pre class="code">{{ q.code }}</pre>{% endif %}
+<div class="opts">{% for o in opts %}<label class="opt"><input type="{{ 'checkbox' if q.type=='msq' else 'radio' }}" name="opt" value="{{ loop.index0 }}"><span><i>{{ 'ABCD'[loop.index0] }}</i>{{ o }}</span></label>{% endfor %}</div>
+<div class="row"><button type="button" class="btn ghost" onclick="openAI({{ q.id }});ask('Give me a hint')">Ask AI for a hint</button><button class="btn">{{ 'Finish round' if n==total else 'Save and continue' }}</button></div></form></div>{% endblock %}
